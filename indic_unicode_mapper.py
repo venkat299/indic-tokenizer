@@ -3,14 +3,13 @@ import pygtrie
 class IndicUnicodeMapper:
     __tamil_vowels = ['\u0BBE', '\u0BBF', '\u0BC0', '\u0BC1', '\u0BC2', '\u0BC6', '\u0BC7', '\u0BC8', '\u0BCA', ['\u0BBE', '\u0BC6'], ['\u0BC6', '\u0BBE'], '\u0BCB', '\u0BD7', '\u0BCC', ['\u0BC6', '\u0BD7'], ['\u0BD7', '\u0BC6'], '\u0BCD', ['\u0BBE', '\u0BC7'], ['\u0BC7', '\u0BBE'],  ['\u0BC1', '\u0BBE'], ['\u0BC1', '\u0BC1'],['\u0BCB', '\u0BBF'],['\u0BCA', '\u0BBF']] 
     __tamil_consonants = ['\u0B95', '\u0B99', '\u0B9A', '\u0B9C', '\u0B9E', '\u0B9F', '\u0BA3', '\u0BA4', '\u0BA8', '\u0BA9', '\u0BAA', '\u0BAE', '\u0BAF', '\u0BB0', '\u0BB1', '\u0BB2', '\u0BB3', '\u0BB4', '\u0BB5', '\u0BB6', '\u0BB7', '\u0BB8', '\u0BB9']
-    __tamil_specials = [['\u0BBE', '\u0BCD'],['\u0BBE', '\u0BBF']]
     # some usage conventions need fixing.
     __tamil_replacements = {"ாி":"ரி", "ா்":"ர்", "ௗ்":"ள்"}
 
     # order of loading the languages.
     __indic_languages = ['ta']  
     # put all the indian vowel consonant pairs here
-    __indic_symbols = {"ta":(__tamil_vowels, __tamil_consonants, __tamil_specials)}
+    __indic_symbols = {"ta":(__tamil_vowels, __tamil_consonants)}
     # the starting point of the mapped symbols
     __start_unicode = 0xE001
     # max grapheme length for a language
@@ -38,14 +37,6 @@ class IndicUnicodeMapper:
                     self.__forward[_s] = mapped_unicode
                     self.__reverse[mapped_unicode] = _s
                     _index += 1
-            # add the specials to the list
-            #for _s in s:
-            #    __s = "".join(_s)
-            #    mapped_unicode = chr(_index)
-            #    self.__forward[__s] = mapped_unicode
-            #    self.__reverse[mapped_unicode] = __s
-            #    _index += 1
-
             # create a cache of vowels
             cache = set()
             for v_ in v:
