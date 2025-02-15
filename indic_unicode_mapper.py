@@ -1,9 +1,11 @@
 import pygtrie
 
 class IndicUnicodeMapper:
-    __tamil_vowels = ['\u0BBE', '\u0BBF', '\u0BC0', '\u0BC1', '\u0BC2', '\u0BC6', '\u0BC7', '\u0BC8', '\u0BCA', ['\u0BBE', '\u0BC6'], ['\u0BC6', '\u0BBE'], '\u0BCB', '\u0BD7', '\u0BCC', ['\u0BC6', '\u0BD7'], ['\u0BD7', '\u0BC6'], '\u0BCD', ['\u0BBE', '\u0BC7'], ['\u0BC7', '\u0BBE'],  ['\u0BC1', '\u0BBE'], ['\u0BC1', '\u0BC1'],['\u0BBE', '\u0BBF'],['\u0BCB', '\u0BBF'],['\u0BCA', '\u0BBF']] 
+    __tamil_vowels = ['\u0BBE', '\u0BBF', '\u0BC0', '\u0BC1', '\u0BC2', '\u0BC6', '\u0BC7', '\u0BC8', '\u0BCA', ['\u0BBE', '\u0BC6'], ['\u0BC6', '\u0BBE'], '\u0BCB', '\u0BD7', '\u0BCC', ['\u0BC6', '\u0BD7'], ['\u0BD7', '\u0BC6'], '\u0BCD', ['\u0BBE', '\u0BC7'], ['\u0BC7', '\u0BBE'],  ['\u0BC1', '\u0BBE'], ['\u0BC1', '\u0BC1'],['\u0BCB', '\u0BBF'],['\u0BCA', '\u0BBF']] 
     __tamil_consonants = ['\u0B95', '\u0B99', '\u0B9A', '\u0B9C', '\u0B9E', '\u0B9F', '\u0BA3', '\u0BA4', '\u0BA8', '\u0BA9', '\u0BAA', '\u0BAE', '\u0BAF', '\u0BB0', '\u0BB1', '\u0BB2', '\u0BB3', '\u0BB4', '\u0BB5', '\u0BB6', '\u0BB7', '\u0BB8', '\u0BB9']
     __tamil_specials = [['\u0BBE', '\u0BCD'],['\u0BBE', '\u0BBF']]
+    # some usage conventions need fixing.
+    __tamil_replacements = {"ாி":"ரி", "ா்":"ர்", "ௗ்":"ள்"}
 
     # order of loading the languages.
     __indic_languages = ['ta']  
@@ -37,12 +39,12 @@ class IndicUnicodeMapper:
                     self.__reverse[mapped_unicode] = _s
                     _index += 1
             # add the specials to the list
-            for _s in s:
-                __s = "".join(_s)
-                mapped_unicode = chr(_index)
-                self.__forward[__s] = mapped_unicode
-                self.__reverse[mapped_unicode] = __s
-                _index += 1
+            #for _s in s:
+            #    __s = "".join(_s)
+            #    mapped_unicode = chr(_index)
+            #    self.__forward[__s] = mapped_unicode
+            #    self.__reverse[mapped_unicode] = __s
+            #    _index += 1
 
             # create a cache of vowels
             cache = set()
@@ -88,12 +90,21 @@ class IndicUnicodeMapper:
                 return False
         # all good here.
         return True
+    
+    # replace broken strings into correct formats
+    def __normalize(self, text:str) -> str:
+        for item in self.__tamil_replacements.keys():
+            text = text.replace(item, self.__tamil_replacements[item])
+        return text
  
     # encode the supplied ucs-2 indic string into unicode mapped ucs-2 string
     def encode(self, text:str, lang="ta"):
         if lang not in self.__max_length:
             raise ValueError(f"unknown language {lang=}")
         
+        # normalize the text to get rid of inconsistencies
+        text = self.__normalize(text)
+
         # get the length of the length
         length = len(text)
         # get the language specific chunk length
