@@ -97,12 +97,12 @@ tokenizer.save_model('.', _outbase)
 
 # let's create another vocabulary for humans to understand.
 if _lang == "ta":
-    with open('./' + _outbase + "-vocab.txt", "r") as fin:
+    with open(_outbase + "-vocab.txt", "r") as fin:
         items = fin.readlines()
         fin.close()
 
-        with open('./' + _outbase + "-vocab.indic.txt", "w") as fout:
-            mapped = "\n".join(map(mapper.decode, items))
+        with open(_outbase + "-vocab.indic.txt", "w") as fout:
+            mapped = "".join(map(mapper.decode, items))
             fout.write(mapped)
             fout.close()
 
