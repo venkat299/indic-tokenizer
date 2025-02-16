@@ -70,17 +70,18 @@ class IndicUnicodeMapper:
         return True
 
     # check if the given text contains language vowels.
-    def is_consistent(self, text:str, lang="ta"):
+    # if return value is positive (position of the problem), the text is deemed inconsistent
+    def is_consistent(self, text:str, lang="ta") -> int:
         if lang not in self.__all_vowels:
             raise ValueError(f"unknown language {lang=}")
         
         # scan through the text for left out vowels.
         # stop on the first find.
-        for symbol in text:
+        for index, symbol in enumerate(text):
             if symbol in self.__all_vowels[lang]:
-                return False
+                return index
         # all good here.
-        return True
+        return -1
     
     # replace broken strings into correct formats
     def __normalize(self, text:str) -> str:
