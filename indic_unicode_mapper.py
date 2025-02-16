@@ -24,7 +24,7 @@ class IndicUnicodeMapper:
 
         _index = self.__start_unicode
         for lang in self.__indic_languages:
-            (v, c, s) = self.__indic_symbols[lang]
+            (v, c) = self.__indic_symbols[lang]
             for _c in c:
                 for _v in v:
                     _s = _c
