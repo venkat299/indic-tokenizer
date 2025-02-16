@@ -19,7 +19,6 @@ if not os.path.exists(_path):
 
 import os
 from glob import glob
-import tempfile
 from indic_unicode_mapper import IndicUnicodeMapper
 
 # collect the input data file paths.
@@ -44,9 +43,9 @@ tmpdir = f"/tmp/mapped-{_lang}"
 os.makedirs(tmpdir, exist_ok=True)
 
 er = open('/tmp/errored.txt', "w")
+mapper = IndicUnicodeMapper()
 
 if _lang == "ta":
-    mapper = IndicUnicodeMapper()
     nfiles = []
 
     for file in files:
@@ -64,7 +63,7 @@ if _lang == "ta":
                 tpool.close()
 
                 for i in range(len(consistency_check)):
-                    if not consistency_check[i]:
+                    if consistency_check[i] >= 0:
                         er.write(lines[i] + "\n")
                         er.write(elines[i] + "\n")
 
@@ -95,4 +94,15 @@ tokenizer.train(files=files, vocab_size=_vsize, min_frequency=2,
                 special_tokens=spl_tokens)
 
 tokenizer.save_model('.', _outbase)
+
+# let's create another vocabulary for humans to understand.
+if _lang == "ta":
+    with open('./' + _outbase + "-vocab.txt", "r") as fin:
+        items = fin.readlines()
+        fin.close()
+
+        with open('./' + _outbase + "-vocab.indic.txt", "w") as fout:
+            mapped = "\n".join(map(mapper.decode, items))
+            fout.write(mapped)
+            fout.close()
 
