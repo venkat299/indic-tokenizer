@@ -1,0 +1,29 @@
+# https://packaging.python.org/en/latest/tutorials/packaging-projects/
+
+[build-system]
+requires = ["setuptools >= 75.5.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "indic_tokenizer"
+version = "0.0.2"
+authors = [
+  { name="Sudarsun Santhiappan", email="sudarsun@gmail.com" },
+]
+description = "Python modules for tokenizing Indian languages (only Tamil is implemented for now.)"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+dependencies = [
+    "pygtrie >= 2.5.0",
+    "tokenizers >= 0.21.1",
+]
+
+[project.urls]
+Homepage = "https://github.com/sudarsun/indic-tokenizer"
+Issues = "https://github.com/sudarsun/indic-tokenizer/issues"
