@@ -67,7 +67,7 @@ from indic_bert_tokenizer import IndicBertWordPieceTokenizer
 
 tokenizer = IndicBertWordPieceTokenizer(TOKENIZER_MODEL)
 text = "வணக்கம்! இது ஒரு எடுத்துக்காட்டு."
-tokens = tokenizer.tokenize(text)
+tokens = tokenizer.encode(text)
 print(tokens.ids)
 >>> [3, 73, 441, 1067, 5, 815, 692, 2747, 420, 682, 9, 1]
 print(tokens.tokens)
