@@ -15,10 +15,13 @@ while (line := sys.stdin.readline()): #.strip() != "":
     # strip the new line character
     line = line.strip()
     toks = tokenizer.encode(line)
-    #print(toks.ids)
+    # get the token ids.
+    print(toks.ids)
+    # print the tokens (but encoded in singular unicode)
     print(toks.tokens)
-    #decoded = tokenizer.decode(toks.ids)
-    #print(decoded)
+    # print the decoded tokens
+    print([tokenizer.decode_string(tok) for tok in toks.tokens])
+    # print the decoded string
     decoded = tokenizer.decode(toks.ids)
     print(decoded)
 
