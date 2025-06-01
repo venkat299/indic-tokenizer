@@ -10,6 +10,7 @@ Python modules for tokenizing Indian languages (only Tamil is implemented for no
 
 ```bash
 pip install -r requirements.txt
+
 ```
 
 ## Build the model
@@ -77,6 +78,11 @@ print([tokenizer.decode_string(tok) for tok in toks.tokens])
 tokenizer.decode(toks.ids)
 >>> 'வணக்கம்! இது ஒரு எடுத்துக்காட்டு.'
 ```
+
+## Tutorial
+
+A jupyter notebook tutorial is also available to build a tokenizer model followed by loading and using for tokenization of Tamil texts.
+
 
 ## Supported Languages
 
