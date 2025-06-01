@@ -81,7 +81,7 @@ tokenizer.decode(toks.ids)
 
 ## Tutorial
 
-A jupyter notebook tutorial is also available to build a tokenizer model followed by loading and using for tokenization of Tamil texts.
+A jupyter notebook [tutorial](/tutorial.ipynb) is also available to build a tokenizer model followed by loading and using for tokenization of Tamil texts.
 
 
 ## Supported Languages
