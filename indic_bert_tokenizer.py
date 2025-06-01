@@ -34,9 +34,13 @@ class IndicBertWordPieceTokenizer:
         return self._tokenizer.encode(norm_text)
 
     # method to decode the indic text
-    def decode(self, ids):
+    def decode(self, ids:list[int]):
         # decode the token ids into mapped tokens
         decoded = self._tokenizer.decode(ids)
         # denormalize the mapped tokens to indic language
         norm_text = self._mapper.decode(decoded)
         return norm_text
+    
+    # method to decode the unicode mapping for strings.
+    def decode_string(self, text:str):
+        return self._mapper.decode(text)
