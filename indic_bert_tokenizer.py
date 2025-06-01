@@ -1,7 +1,7 @@
 #/usr/bin/env python3
 
 from tokenizers import BertWordPieceTokenizer
-from indic_unicode_mapper import IndicUnicodeMapper
+from .indic_unicode_mapper import IndicUnicodeMapper
 
 # Extension of the Bert WP Tokenizer in the Indic context (Tamil for starters)
 class IndicBertWordPieceTokenizer:
