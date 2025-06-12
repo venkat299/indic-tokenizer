@@ -6,17 +6,44 @@ class IndicUnicodeMapper:
     # some usage conventions need fixing.
     __tamil_replacements = {"ாி":"ரி", "ா்":"ர்", "ௗ்":"ள்"}
 
+    __malayalam_vowels = ['\u0D00','\u0D01','\u0D02','\u0D03','\u0D04','\u0D3E', '\u0D3F', '\u0D40', '\u0D41', '\u0D42', '\u0D46', '\u0D47', '\u0D48', '\u0D4A', ['\u0D3E', '\u0D46'], ['\u0D46', '\u0D3E'], '\u0D4B', ['\u0D47','\u0D3E'], ['\u0D3E', '\u0D47'], '\u0D57', '\u0D4C', ['\u0D46', '\u0D57'], ['\u0D57', '\u0D46'], '\u0D4D', '\u0D4E', '\u0D62', '\u0D63', '\u0D3B', '\u0D3C', '\u0D3D']
+    __malayalam_consonants = ['\u0D15', '\u0D16','\u0D17','\u0D18','\u0D19', '\u0D1A', '\u0D1B','\u0D1C', '\u0D1D','\u0D1E', '\u0D1F', '\u0D20','\u0D21','\u0D22','\u0D23', '\u0D24','\u0D25','\u0D26', '\u0D27','\u0D28', '\u0D29', '\u0D2A', '\u0D2B','\u0D2C','\u0D2D','\u0D2E', '\u0D2F', '\u0D30', '\u0D31', '\u0D32', '\u0D33', '\u0D34', '\u0D35', '\u0D36', '\u0D37', '\u0D38', '\u0D39', '\u0D3A']
+    __malayalam_replacements = {}
+
     # order of loading the languages.
-    __indic_languages = ['ta']  
+    __indic_languages = ['ta', 'ml']  
     # put all the indian vowel consonant pairs here
-    __indic_symbols = {"ta":(__tamil_vowels, __tamil_consonants)}
+    __indic_symbols = {"ta":(__tamil_vowels, __tamil_consonants, __tamil_replacements),
+                       "ml":(__malayalam_vowels, __malayalam_consonants, __malayalam_replacements)}
     # the starting point of the mapped symbols
     __start_unicode = 0xE001
     # max grapheme length for a language
-    __max_length = {"ta":3}
+    __max_length = {"ta":3, "ml":3}
 
     # cache of language specific vowels.
     __all_vowels = {}
+
+    # get the letters for a language
+    # this is used to get the letters for a language
+    def letters(self, lang="ta") -> list[str]:
+        if lang not in self.__indic_languages:
+            raise ValueError(f"unknown language {lang=}")
+        
+        consonants = self.__indic_symbols[lang][1]
+        vowels = self.__indic_symbols[lang][0]
+
+        letters = []
+        for c in consonants:
+            s = str(c)
+            for v in vowels:
+                vstr = ""
+                if type(v) == list:
+                    vstr = "".join(map(str, v))
+                else:
+                    vstr = str(v)
+                letters.append(s + vstr)
+
+        return letters
 
     def __init__(self):
         self.__forward = pygtrie.CharTrie()
@@ -24,7 +51,7 @@ class IndicUnicodeMapper:
 
         _index = self.__start_unicode
         for lang in self.__indic_languages:
-            (v, c) = self.__indic_symbols[lang]
+            (v, c, _) = self.__indic_symbols[lang]
             for _c in c:
                 for _v in v:
                     _s = _c
@@ -84,9 +111,18 @@ class IndicUnicodeMapper:
         return -1
     
     # replace broken strings into correct formats
-    def __normalize(self, text:str) -> str:
-        for item in self.__tamil_replacements.keys():
-            text = text.replace(item, self.__tamil_replacements[item])
+    def __normalize(self, text:str, lang="ta") -> str:
+        if lang not in self.__all_vowels:
+            raise ValueError(f"unknown language {lang=}")
+        
+        # fetch the replacements for the language
+        replacements = self.__indic_symbols[lang][2]
+
+        # replace the broken vowels with correct ones
+        for item in replacements.keys():
+            text = text.replace(item, replacements[item])
+
+        # return the normalized text
         return text
  
     # encode the supplied ucs-2 indic string into unicode mapped ucs-2 string
@@ -95,7 +131,7 @@ class IndicUnicodeMapper:
             raise ValueError(f"unknown language {lang=}")
         
         # normalize the text to get rid of inconsistencies
-        text = self.__normalize(text)
+        text = self.__normalize(text, lang=lang)
 
         # get the length of the length
         length = len(text)
@@ -114,7 +150,7 @@ class IndicUnicodeMapper:
                     mapped_str = self.__forward[substr]
                     current += chunk_length
                     success = True
-                    output += mapped_str
+                    output += str(mapped_str)
                     break
             if not success:
                 if text[current] != '\u0bcd':
