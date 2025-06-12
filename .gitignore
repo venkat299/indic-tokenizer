@@ -1,3 +1,7 @@
 pkg/dist/*
 __pycache__/
 *egg-info/
+logs/
+.vscode/
+*.txt
+*.log
