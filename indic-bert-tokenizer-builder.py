@@ -2,19 +2,21 @@
 
 import sys
 import os.path
+from logger import get_logger
 
-if len(sys.argv) < 5:
-    print("requires <folder|file> <lang=ta|en> <vsize> <outbase>")
+if len(sys.argv) < 4:
+    print("requires <folder|file> <vsize> <outbase>")
     sys.exit(0)
 
 _path = sys.argv[1]
-_lang = sys.argv[2]
-_vsize =int(sys.argv[3])
-_outbase = sys.argv[4]
+_vsize =int(sys.argv[2])
+_outbase = sys.argv[3]
+
+logger = get_logger("indic-bert-tokenizer-builder")
 
 # check if the file exists
 if not os.path.exists(_path):
-    print(f"{_path=} does not exist!")
+    logger.error(f"{_path=} does not exist!")
     sys.exit(0)
 
 import os
@@ -29,80 +31,18 @@ if os.path.isdir(_path):
 elif os.path.isfile(_path):
     files.append(_path)
 else:
-    print(f"{_path=} is not a usable path.")
+    logger.error(f"{_path=} is not a valid file or directory.")
     sys.exit(0)
 
 # sanity check.
 if len(files) <= 0:
-    print("no valid input data files to process.")
+    logger.error("no valid input data files to process.")
     sys.exit(0)
 
-import multiprocessing
+from indic_bert_tokenizer import IndicBertWordPieceTokenizer
+tok = IndicBertWordPieceTokenizer.build_model(files, vocab_size=_vsize, model_dir=_outbase, human_readable=True)
 
-tmpdir = f"/tmp/mapped-{_lang}"
-os.makedirs(tmpdir, exist_ok=True)
-
-er = open('/tmp/errored.txt', "w")
-mapper = IndicUnicodeMapper()
-
-if _lang == "ta":
-    nfiles = []
-
-    for file in files:
-        fname = os.path.basename(file)
-        fpath = tmpdir + "/" + fname
-        print(f"mapping {file} -> {fpath}")
-        with open(fpath, "w") as fw:
-            with open(file, "r") as fh:
-                lines = fh.readlines()
-                fh.close()
-
-                tpool = multiprocessing.Pool()
-                elines = tpool.map(mapper.encode, lines)
-                consistency_check = tpool.map(mapper.is_consistent, elines)
-                tpool.close()
-
-                for i in range(len(consistency_check)):
-                    if consistency_check[i] >= 0:
-                        er.write(lines[i] + "\n")
-                        er.write(elines[i] + "\n")
-
-                etext = "\n".join(elines)
-            fw.write(etext)
-            fw.close()
-            nfiles.append(fpath)
-
-    files = nfiles
-
-from tokenizers import BertWordPieceTokenizer
-
-cls_token = "[cls]"
-sep_token = "[sep]"
-mask_token = "[mask]"
-pad_token = "[pad]"
-unk_token = "[unk]"
-spl_tokens = ["[unk]", "[sep]", "[mask]", "[cls]", "[pad]"]  # special tokens
-tokenizer = BertWordPieceTokenizer(clean_text=False, 
-                                   handle_chinese_chars=True, 
-                                   strip_accents=False,
-                                   lowercase=False,
-                                   sep_token=sep_token, unk_token=unk_token, 
-                                   mask_token=mask_token, cls_token=cls_token, pad_token=pad_token)
-
-tokenizer.train(files=files, vocab_size=_vsize, min_frequency=2,
-                limit_alphabet=512, wordpieces_prefix='##',
-                special_tokens=spl_tokens)
-
-tokenizer.save_model('.', _outbase)
-
-# let's create another vocabulary for humans to understand.
-if _lang == "ta":
-    with open(_outbase + "-vocab.txt", "r") as fin:
-        items = fin.readlines()
-        fin.close()
-
-        with open(_outbase + "-vocab.indic.txt", "w") as fout:
-            mapped = "".join(map(mapper.decode, items))
-            fout.write(mapped)
-            fout.close()
-
+toks = tok.encode("தமிழ் மொழி ஒரு இனிய மொழி. മലയാളം ഭാഷയും இனிய ഭാഷ.")
+print(toks.ids)
+print(toks.tokens)
+print([tok.decode_string(tok) for tok in toks.tokens])
