@@ -6,11 +6,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "indic_tokenizer"
-version = "0.0.2"
+version = "0.0.3"
 authors = [
-  { name="Sudarsun Santhiappan", email="sudarsun@gmail.com" },
+  { name="Dr. Sudarsun Santhiappan", email="sudarsun@gmail.com" },
 ]
-description = "Python modules for tokenizing Indian languages (only Tamil is implemented for now.)"
+description = "Python modules for tokenizing Indian languages (only Tamil & Malayalam are implemented for now.)"
 readme = "README.md"
 requires-python = ">=3.10"
 classifiers = [
