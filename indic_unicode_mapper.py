@@ -1,6 +1,18 @@
+# @author: Sudarsun S
+# @date: 2025-06-13
+# description: This module provides a mapping between Indic Unicode characters and their corresponding representations.
+# @license: MIT License
+
 import pygtrie
 
 class IndicUnicodeMapper:
+    """
+    A class to map Indic Unicode characters to their corresponding representations.
+    This class supports Tamil and Malayalam languages, providing methods to encode and decode text,
+    check consistency, and generate normalization rules for sentencepiece tokenizers.
+    """
+    # define the unicode characters for Tamil and Malayalam vowels and consonants.
+    # Tamil and Malayalam are the only languages supported for now.
     __tamil_vowels = ['\u0BBE', '\u0BBF', '\u0BC0', '\u0BC1', '\u0BC2', '\u0BC6', '\u0BC7', '\u0BC8', '\u0BCA', ['\u0BBE', '\u0BC6'], ['\u0BC6', '\u0BBE'], '\u0BCB', '\u0BD7', '\u0BCC', ['\u0BC6', '\u0BD7'], ['\u0BD7', '\u0BC6'], '\u0BCD', ['\u0BBE', '\u0BC7'], ['\u0BC7', '\u0BBE'],  ['\u0BC1', '\u0BBE'], ['\u0BC1', '\u0BC1'],['\u0BCB', '\u0BBF'],['\u0BCA', '\u0BBF']] 
     __tamil_consonants = ['\u0B95', '\u0B99', '\u0B9A', '\u0B9C', '\u0B9E', '\u0B9F', '\u0BA3', '\u0BA4', '\u0BA8', '\u0BA9', '\u0BAA', '\u0BAE', '\u0BAF', '\u0BB0', '\u0BB1', '\u0BB2', '\u0BB3', '\u0BB4', '\u0BB5', '\u0BB6', '\u0BB7', '\u0BB8', '\u0BB9']
     # some usage conventions need fixing.
