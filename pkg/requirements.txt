@@ -1,0 +1,2 @@
+pygtrie>=2.5.0
+tokenizers>=0.21.1

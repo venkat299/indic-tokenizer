@@ -9,7 +9,7 @@ Python modules for tokenizing Indian languages (only Tamil & Malayalam are imple
 ## Installation
 
 ```bash
-pip install -i https://test.pypi.org/simple/ indic-tokenizer==0.0.3
+pip install -i https://test.pypi.org/simple/ indic-tokenizer==0.0.4
 
 ```
 

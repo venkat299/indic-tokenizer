@@ -4,9 +4,12 @@
 requires = ["setuptools >= 75.5.0"]
 build-backend = "setuptools.build_meta"
 
+[tool.setuptools.dynamic]
+dependencies = {file = "requirements.txt"}
+
 [project]
 name = "indic_tokenizer"
-version = "0.0.3"
+version = "0.0.4"
 authors = [
   { name="Dr. Sudarsun Santhiappan", email="sudarsun@gmail.com" },
 ]

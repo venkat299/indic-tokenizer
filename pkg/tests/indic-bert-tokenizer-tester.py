@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # ensure the package is installed.
-# pip install -i https://test.pypi.org/simple/ indic-tokenizer==0.0.3
+# pip install -i https://test.pypi.org/simple/ indic-tokenizer==0.0.4
 
 import sys
 
