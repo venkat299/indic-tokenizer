@@ -10,12 +10,12 @@ This module implements an Indic BERT WordPiece Tokenizer using the Indic Unicode
 """
 
 from tokenizers.implementations import BertWordPieceTokenizer
-from indic_unicode_mapper import IndicUnicodeMapper
+from .indic_unicode_mapper import IndicUnicodeMapper
 import tempfile
 import os
 import multiprocessing
 import shutil
-from logger import get_logger
+from .logger import get_logger
 
 # Extension of the Bert WP Tokenizer in the Indic context (Tamil for starters)
 class IndicBertWordPieceTokenizer:

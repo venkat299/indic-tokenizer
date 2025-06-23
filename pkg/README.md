@@ -9,7 +9,7 @@ Python modules for tokenizing Indian languages (only Tamil & Malayalam are imple
 ## Installation
 
 ```bash
-pip install -i https://test.pypi.org/simple/ indic-tokenizer==0.0.4
+pip install -i https://test.pypi.org/simple/ indic-tokenizer
 
 ```
 
@@ -27,7 +27,7 @@ OUTBASE_DIR = "."
 
 # Indic tokenizer uses Indic unicode mapper that maps the sequence of unicode that constitute a grapheme 
 # into a singular unicode in the 0xE00X range.
-from indic_bert_tokenizer import IndicBertWordPieceTokenizer
+from indic_tokenizer import IndicBertWordPieceTokenizer
 tok = IndicBertWordPieceTokenizer.build_model(files, vocab_size=VOCAB_SIZE, model_dir=OUTBASE_DIR, human_readable=True)      
 ```
 
