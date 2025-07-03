@@ -18,15 +18,15 @@ pip install -r requirements.txt
 Assuming a folder or a file containing the `text` content for tokenization (say `ENCODED-FILES-FOLDER`), the first step is to map the graphemes into singular unicodes.
 
 ```python
-# setup the Vocabulary size requirement
+# Set up the Vocabulary size requirement
 VOCAB_SIZE = 3000
 # set up the output base directory
-# typically the model gets saved as OUTBASE_DIR/indic-bert-tokenizer-vocab.txt
-# additionally, if we also need the human readable vocabulary, the file gets saved as OUTBASE_DIR/indic-bert-tokenizer-vocab.indic.txt
+# Typically, the model gets saved as OUTBASE_DIR/indic-bert-tokenizer-vocab.txt
+# Additionally, if we also need the human-readable vocabulary, the file gets saved as OUTBASE_DIR/indic-bert-tokenizer-vocab.indic.txt
 OUTBASE_DIR = "."
 
-# Indic tokenizer uses Indic unicode mapper that maps the sequence of unicode that constitute a grapheme 
-# into a singular unicode in the 0xE00X range.
+# Indic tokenizer uses Indic Unicode mapper that maps the sequence of Unicode that constitutes a grapheme 
+# into a singular Unicode in the 0xE00X range.
 from indic_bert_tokenizer import IndicBertWordPieceTokenizer
 tok = IndicBertWordPieceTokenizer.build_model(files, vocab_size=VOCAB_SIZE, model_dir=OUTBASE_DIR, human_readable=True)      
 ```
@@ -38,7 +38,7 @@ tok = IndicBertWordPieceTokenizer.build_model(files, vocab_size=VOCAB_SIZE, mode
 ```python
 from indic_bert_tokenizer import IndicBertWordPieceTokenizer
 
-TOKENIZE_MODEL = OUTBASE_DIR + "/indic-bert-tokenizer-vocab.txt"
+TOKENIZER_MODEL = OUTBASE_DIR + "/indic-bert-tokenizer-vocab.txt"
 tokenizer = IndicBertWordPieceTokenizer(TOKENIZER_MODEL)
 text = "வணக்கம்! இது ஒரு எடுத்துக்காட்டு."
 tokens = tokenizer.encode(text)
@@ -55,7 +55,7 @@ tokenizer.decode(toks.ids)
 
 ## Tutorial
 
-A jupyter notebook [tutorial](/tutorial.ipynb) is also available to build a tokenizer model followed by loading and using for tokenization of Tamil texts.
+A Jupyter notebook tutorial [tutorial](/tutorial.ipynb) is also available to build a tokenizer model, followed by loading and using it for tokenizing Tamil and Malayalam texts.
 
 
 ## Supported Languages
