@@ -57,6 +57,48 @@ tokenizer.decode(toks.ids)
 
 A Jupyter notebook tutorial [tutorial](/tutorial.ipynb) is also available to build a tokenizer model, followed by loading and using it for tokenizing Tamil and Malayalam texts.
 
+## Tamil Language Model and Lyrics Generator
+
+This project now includes utilities for building a tiny Tamil language model and generating song lyrics.
+
+### 1. Pre-train a Tiny Tamil Model
+
+Download a small portion of the open [IndicCorp](https://huggingface.co/datasets/ai4bharat/IndicCorp) dataset and run:
+
+```bash
+python scripts/pretrain_tamil_gpt.py \
+  --samples 1000 \
+  --output_dir tamil-pretrained \
+  --tokenizer_path path/to/indic-bert-tokenizer-vocab.txt
+```
+
+The script trains a compact GPT-2 style model from scratch using the provided Indic tokenizer vocabulary and saves it to `tamil-pretrained/`.
+
+### 2. Fine-tune on Tamil Song Lyrics
+
+Obtain a Tamil lyrics dataset from [Hugging Face Datasets](https://huggingface.co/datasets) and fine-tune the pretrained model:
+
+```bash
+python scripts/fine_tune_lyrics.py \
+  --dataset_name <dataset> \
+  --model_dir tamil-pretrained \
+  --output_dir tamil-lyrics-model \
+  --samples 1000 \
+  --tokenizer_path path/to/indic-bert-tokenizer-vocab.txt
+```
+
+Replace `<dataset>` with the dataset identifier (for example, `your-username/tamil-lyrics`). The fine-tuned model and tokenizer are saved to `tamil-lyrics-model/`.
+
+### 3. Web Interface for Lyrics Generation
+
+A simple [Gradio](https://gradio.app) application generates song lyrics for a given theme:
+
+```bash
+python app.py
+```
+
+Enter a theme and the app will produce approximately three minutes of Tamil lyrics using the fine-tuned model.
+
 
 ## Supported Languages
 
